@@ -123,6 +123,7 @@ points = PoolVector2Array( 70, 70, 0, 70, 0, 0, 70, 0 )
 8/z_index = 0
 
 [node name="Level1" type="Node2D"]
+position = Vector2( 1, 0 )
 __meta__ = {
 "_edit_group_": true
 }

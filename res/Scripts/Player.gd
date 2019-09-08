@@ -8,8 +8,8 @@ var is_running = false
 var start_position = Vector2()
 
 #
-var lives = 3
-var coins = 0
+var lives
+var coins
 
 # Constants
 const FLOOR_DIRECTION = Vector2(0,-1)
@@ -21,14 +21,12 @@ const DRAG = 1.07
 
 # Different sprites
 var front_sprite = preload("res://Sprites/player/player_front.png")
-var hurt_sprite = preload("res://Sprites/player/player_hurt.png")
+# var hurt_sprite = preload("res://Sprites/player/player_hurt.png")
 var stand_sprite = preload("res://Sprites/player/player_stand.png")
 var couching_sprite = preload("res://Sprites/player/player_duck.png")
 var jumping_sprite = preload("res://Sprites/player/player_jump.png")
 
 
-# The HUD
-onready var HUD = get_node("../../../HUD")
 # To change collision shape heigh
 onready var thisCollisionShape = get_node("CollisionShape2D").get_shape()
 
@@ -48,11 +46,11 @@ func restart_animated_sprite():
 
 func die():
 	lives -= 1
-	HUD.update_lives(lives)
+	get_node("../../../HUD").update_lives(lives)
 
 	if lives == 0:
 		# Update gui with "Game over!!"
-		HUD.game_over()
+		get_node("../../../HUD").game_over()
 
 	else:
 		position = start_position
@@ -62,11 +60,11 @@ func collect_a_coin():
 
 	coins += 1
 	# Update gui with quantity of coins
-	HUD.update_coins(coins)
 
 
 func _ready():
-	start_position = position
+	lives = get_tree().get_root().get_node("Root").player_lives
+	coins = get_tree().get_root().get_node("Root").player_coins
 
 
 func _physics_process(delta):
@@ -86,6 +84,11 @@ func _physics_process(delta):
 
 	is_couching = false
 	if Input.is_action_pressed("ui_down"):
+
+		# Debug
+		for i in get_tree().get_root().get_children():
+			print(i.get_name())
+
 
 		motion.x /= DRAG # Double down
 		is_couching = true
